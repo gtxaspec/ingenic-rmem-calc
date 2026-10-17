@@ -235,7 +235,11 @@ def generate(model, book, sheet_name, sh, socs):
         out.append(f"    {ref!r}: {{'default': {default!r}, 'options': {info.get('options')!r}, "
                    f"'override': {ref in overrides!r}, 'validation': {info.get('validation')!r}, "
                    f"'label': {label(info['label'])!r}}},")
-    out += ["}", "", "# formula cell -> sheet labels", "LABELS = {"]
+    out += ["}", "", "# the sheet's instructions and notes, as shown to its users", "NOTES = ["]
+    for ref, text in sorted(sh["text"].items(), key=lambda kv: (int(re.sub(r"[A-Z]+", "", kv[0])), kv[0])):
+        if len(text) > 40:
+            out.append(f"    ({ref!r}, {text!r}),")
+    out += ["]", "", "# formula cell -> sheet labels", "LABELS = {"]
     for ref in order:
         out.append(f"    {ref!r}: {label(formulas[ref]['label'])!r},")
     out += ["}", "", "", "def compute(values=None):",

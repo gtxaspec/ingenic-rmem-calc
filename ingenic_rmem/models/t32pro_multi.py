@@ -314,6 +314,15 @@ INPUTS = {
     'N91': {'default': None, 'options': None, 'override': False, 'validation': None, 'label': 'byte / TOTAL'},
 }
 
+# the sheet's instructions and notes, as shown to its users
+NOTES = [
+    ('B6', 'ISP\n1、ISP使用的内存可以通过ISP驱动参数isp_memopt选择，配置[0x0, 0x5]时的内存占用相比配置[0x10, 0x15]时的更大，但图像效果更好。配置范围：[0x0, 0x15]，建议配置范围为[0x0, 0x5]或[0x10, 0x15]。如果不配置此参数，默认是0x5。配置方法：insmod tx-isp-t32pro.ko isp_memopt=0x5\n2、ISP使用的sensor缓存可以通过ISP驱动参数isp_cache_line选择，多摄需要根据实际使用情况适当配置该参数。如果不配置此参数，默认是0。配置方法：insmod tx-isp-t32pro.ko isp_cache_line=1620'),
+    ('B16', 'Framesource\n1、主通道 CHN0/CHN3/CHN6/CHN9 可配置 IVDC 直通；多摄只计算第一路共享 IVDC。直通仅在对应 H264/H265 编码开启时有效。\n2、次通道可配置 SubStreamOnline 手动直通；line rows 不能低于 height*1.04 向上 16 行对齐值。未启用或未编码时按非直通 VBM 计算。\n3、主通道 line rows 为 IVDC memline，IVDC stride 取已启用 Sensor 输入最大宽度。'),
+    ('B33', 'I2D/LDC\n1、I2D是旋转模块；LDC是畸变矫正，支持横向竖向畸变矫正；只支持横向畸变矫正。\n2、I2D、LDC、 之间完全互斥，同时只能开启一个。\n3、在线模式(Online)：开启之后，所有通道一起生效。\n4、 离线模式(Offline)：开启之后，可单独配置每个通道生效。\n5、 nrvbs为预留，根据后期软件实现，确定是否可以配置。\n6、Online模式下，建议操作CHN0，若是多个通道既有使用LDC，既有使用I2D，请CHN0设置为I2D（只是内存计算，功能无此限制）。\n'),
+    ('B50', 'OSD\n1、OSD 内存按实际 pool size 评估；主通道使用 ISP OSD，其他通道使用 IPU OSD。\n2、多摄场景 OSD pool 全局复用，不按 Sensor 或 Channel 数重复累加。\n3、当前工程默认 IPU OSD pool=40 KiB、ISP OSD pool=40 KiB；通过 IMP_OSD_SetPoolSize() 和 IMP_OSD_SetPoolSize_ISP() 按项目实配覆盖。'),
+    ('B57', 'Encoder\n1、该模块H265/H264/JPEG支持分段编码功能。\n2、不开启分段编码功能：SDK内部会设置默认ivpu bs大小为3840*2160、jpeg bs大小为500*1024，用户可通过下述API调整码流bs大小。建议用户根据实际产品使用调整。\nIMP_Encoder_SetIvpuBsSize(uint32_t ivpuBsSize)；设置H264/H265码流bs大小\nIMP_Encoder_SetJpegBsSize(uint32_t jpegBsSize)；设置JPEG码流bs大小\n3、开启分段编码功能(默认开启)：当前工程评估默认 IVPU BS=100*1024，JPEG BS=10*1024；项目可按实际 API 配置调整。\n4、开启运动质量优化功能(默认关闭)：用户可以通过下述接口控制开关\nIMP_Encoder_SetMotionQualityEnable(int encChn, int enable)；\n5、开启QpgAI功能(默认关闭)：用户可以通过下述接口控制开关\nIMP_Encoder_SetChnQpgAIEnable(int encChn, int enable)；\n6、开启Jrfc_Max_Size功能(默认开启)：用户可以通过下述接口进行参数设置，默认Jrfc_Max_Size等于80\nIMP_Encoder_SetChnRfcRatio(int encChn, int jrfc_ratio)；'),
+]
+
 # formula cell -> sheet labels
 LABELS = {
     'G9': 'size',

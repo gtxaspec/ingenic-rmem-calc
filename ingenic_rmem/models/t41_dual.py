@@ -106,6 +106,12 @@ INPUTS = {
     'R27': {'default': 'No', 'options': ['Yes', 'No'], 'override': False, 'validation': {'type': 'list', 'formula1': '"Yes,No"', 'allow_blank': True, 'options': ['Yes', 'No']}, 'label': 'DEFAULT / No'},
 }
 
+# the sheet's instructions and notes, as shown to its users
+NOTES = [
+    ('A1', 'Instruction:\n1. Set sensor, main stream, second stream, third stream resoluton, image formate and nrVbs value;\n2. Set the memory size\n3. Set the encoding resolution (pay attention to the different encoding size and channel resolution);\n4. Set the encoding type: in the Codec column, select HEVC, that is, 265 encoding, and select AVC that is 264 encoding, and the memory usage is different for different encoding types;\n5. Set whether to enable channel: En, whether to enable jpeg encoding: EnJpeg;\n6. The rest of the option settings can be set according to the default settings\nFinally, the memory partition cmdline will be automatically calculated, and it can be directly copied and used.'),
+    ('A28', 'Note: JPEG consumes little space, so it is not added to the calculation here'),
+]
+
 # formula cell -> sheet labels
 LABELS = {
     'C21': 'Yes / width',

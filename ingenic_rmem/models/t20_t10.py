@@ -44,6 +44,11 @@ INPUTS = {
     'L18': {'default': 'No', 'options': ['No'], 'override': False, 'validation': {'type': 'list', 'formula1': '"No"', 'allow_blank': True, 'options': ['No']}, 'label': 'No / No'},
 }
 
+# the sheet's instructions and notes, as shown to its users
+NOTES = [
+    ('A1', '使用说明：\n1.设置Sensor、主路、次路、第三路分辨率，图像格式和nrVbs大小；\n2.设置内存大小\n3.设置编码分辨率(需要注意编码尺寸和通道分辨率不同的情形）；\n4、设置是否是能通道:En，是否是能jpeg编码:EnJpeg，是否是能Smart：EnSmart,若HSkip类型为N1X，则选NO，否则选Yes\n最后会自动算出内存分割cmdline，直接复制使用即可。'),
+]
+
 # formula cell -> sheet labels
 LABELS = {
     'C16': 'Yes / width',

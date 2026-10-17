@@ -87,6 +87,12 @@ INPUTS = {
     'C23': {'default': 1, 'options': ['0', '1', '2', '3', '4'], 'override': False, 'validation': {'type': 'list', 'formula1': '"0,1,2,3,4"', 'allow_blank': True, 'options': ['0', '1', '2', '3', '4']}, 'label': 'IVDC'},
 }
 
+# the sheet's instructions and notes, as shown to its users
+NOTES = [
+    ('A1', '使用说明：\n1.设置Sensor、主路、次路、第三路分辨率和nrVbs大小；\n2.设置编码是否开启，IVDC功能是否开启，编码MMA是否开启和编码LTR功能是否开启；\n3.设置编码类型，在Codec一栏选择HEVC即265编码、选择AVC即264编码，不同编码类型内存使用不一样；\n4.设置编码分辨率(需要注意编码尺寸和通道分辨率不同的情形）；\n5.其余选项设置可以按照默认设置进行；\n6.注意编码LTR不能与编码MMA共用；\n7.黄色标记部分为可配置部分；蓝色为对应输出的结果；灰色为不可配置部分；\n最后会自动算出内存分割cmdline，直接复制使用即可。\n'),
+    ('A21', '开启IVDC功能之后，需要使用rmem内存，具体大小根据ivdc_mem_line设置计算。'),
+]
+
 # formula cell -> sheet labels
 LABELS = {
     'E8': '主路',

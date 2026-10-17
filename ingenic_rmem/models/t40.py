@@ -163,6 +163,12 @@ INPUTS = {
     'S37': {'default': None, 'options': None, 'override': False, 'validation': None, 'label': 'Byte / 总和'},
 }
 
+# the sheet's instructions and notes, as shown to its users
+NOTES = [
+    ('A1', '使用说明：\n1.黄色背景单元格为可配置区域。\n2.设置Sensor、主路、次路、第三路分辨率，RAW格式和图像格式和nrVbs大小；\n3.设置单双摄、3D裁剪、单帧调度和双摄缓存。\n4.设置芯片内存大小\n5.设置编码分辨率(需要注意编码尺寸和通道分辨率不同的情形）；\n6.设置编码类型，在Codec一栏选择HEVC即265编码、选择AVC即264编码，不同编码类型内存使用不一样；\n7、设置是否是能通道:En，是否是能jpeg编码:EnJpeg；\n8、其余选项设置可以按照默认设置进行\n最后会自动算出内存分割cmdline，直接复制使用即可。\n\n参数注释：\n1. preduque 单帧调度功能，目前只在单摄支持。\n2. isp_memopt 内存裁剪，会对图像效果有少许影响。\n3. Dual Sensor 双摄计算开关\n4. Dual sensor mode 双摄内存缓存策略。0 不缓存，直通；1 主摄缓存；2 主次摄都缓存。'),
+    ('A30', '备注：\n1. 双摄缓存大小配置，开启之后，会申请并使用rmem内存。\n2. 缓存帧不足或无缓存，在sensor时序紧张情况下，会出现isp overflow报错，isp丢帧等。\n3. 黄色背景单元格为缓存帧数配置。\n4. 缓存模式说明，请参考表格开头的参数说明部分。'),
+]
+
 # formula cell -> sheet labels
 LABELS = {
     'J8': 'NV12 / nrvbs',

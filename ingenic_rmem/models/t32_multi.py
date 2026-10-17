@@ -266,6 +266,15 @@ INPUTS = {
     'L91': {'default': None, 'options': None, 'override': False, 'validation': None, 'label': 'byte / channel rmem'},
 }
 
+# the sheet's instructions and notes, as shown to its users
+NOTES = [
+    ('B6', 'ISP\n1、ISP使用的内存可以通过ISP驱动参数isp_memopt选择，配置[0x0, 0x5]时的内存占用相比配置[0x10, 0x15]时的更大，但图像效果更好。配置范围：[0x0, 0x15]，建议配置范围为[0x0, 0x5]或[0x10, 0x15]。如果不配置此参数，默认是0x5。配置方法：insmod tx-isp-t32.ko isp_memopt=0x5\n2、ISP使用的sensor缓存可以通过ISP驱动参数isp_cache_line选择，多摄需要根据实际使用情况适当配置该参数。如果不配置此参数，默认是0。配置方法：insmod tx-isp-t32.ko isp_cache_line=1620'),
+    ('B16', 'Framesource\n1、IVDC属于编码直通模式，开启后rmem内存占用减少。默认不开启编码直通。（注：多摄下ivdc_mem_line需配置为使用分辨率中最大的高度一半，ivdc_mem_stride需配置为使用分辨率中最大的宽度）\n    a. 多摄编码直通模式下，ivdc_mem_line默认为1080，ivdc_mem_stride默认为3840。\n    b. 双摄双直通及多摄双直通配置方法：insmod tx-isp-t32.ko direct_mode=2 ivdc_mem_line=810 ivdc_mem_stride=max_width；\n    c. 三摄三直通及多摄三直通配置方法：insmod tx-isp-t32.ko direct_mode=3 ivdc_mem_line=810 ivdc_mem_stride=max_width；\n    d. 四摄四直通配置方法：insmod tx-isp-t32.ko direct_mode=4 ivdc_mem_line=810 ivdc_mem_stride=max_width；\n2、单摄只有通道0支持编码直通模式。\n3、通道2一般为算法使用通道，推荐nrvbs配置为1。\n4、双摄情况下，0和1为两个VIC的输入；三摄为0和2外部通过switch切换输入到一个VIC；四摄为0和2外部通过switch切换输入到一个VIC，1和3外部通过switch切换输入到一个VIC。'),
+    ('B33', 'I2D\n1、I2D是旋转模块，通道0使用编码直通模式后不能使用该模块\n2、I2D使能后，每个通道占用内存增加nrvbs*width*height*3/2大小'),
+    ('B50', 'OSD\n1、使用该模块前必须通过下面API设置内存大小。\nIMP_OSD_SetPoolSize(int size);\nIMP_OSD_SetPoolSize_ISP(int size);\n2、编码直通模式下，通道0只能使用ISP OSD，其他通道可以使用IPU OSD。\n3、OSD内存大小跟方案中使用的最大叠加图片大小有关系。一般设置成128K。'),
+    ('B57', 'Encoder\n1、该模块H265/H264支持分段编码功能。\n2、不开启分段编码功能：SDK内部会设置默认ivpu bs大小为3840*2160、jpeg bs大小为500*1024，用户可通过下述API调整码流bs大小。建议用户根据实际产品使用调整。\nIMP_Encoder_SetIvpuBsSize(uint32_t ivpuBsSize)；设置H264/H265码流bs大小\nIMP_Encoder_SetJpegBsSize(uint32_t jpegBsSize)；设置JPEG码流bs大小\n3、开启分段编码功能(默认开启)：SDK内部会设置分段编码bs大小为500*1024，用户也可通过下述API进行调整。\nIMP_Encoder_SetMultiSectionMode(int mode, int size, int cnt)；设置分段编码模式、分段编码bs大小和cnt\n4、开启运动质量优化功能(默认关闭)：用户可以通过下述接口控制开关\nIMP_Encoder_SetMotionQualityEnable(int encChn, int enable)；\n5、开启QpgAI功能(默认关闭)：用户可以通过下述接口控制开关\nIMP_Encoder_SetChnQpgAIEnable(int encChn, int enable)；'),
+]
+
 # formula cell -> sheet labels
 LABELS = {
     'G9': 'size',

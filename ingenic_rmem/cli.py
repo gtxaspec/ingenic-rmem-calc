@@ -30,6 +30,10 @@ def parse_value(text):
 def check(ref, info, value):
     """The sheet's own data validation, or None when the value is acceptable."""
     opts = info.get("options")
+    val = info.get("validation") or {}
+    if not opts and val.get("type") == "custom" and (val.get("formula1") or "").startswith('"'):
+        # the T40 V1.1 / T41 dual sheets declare their Yes/No list as type custom
+        opts = val["formula1"].strip('"').split(",")
     if opts:
         if not any(str(o).lower() == str(value).lower() for o in opts):
             return f"{ref}: {value!r} is not one of {opts}"
@@ -134,6 +138,12 @@ def cmd_inputs(args):
             what = f"{v.get('type')} {v.get('operator', '')} {v.get('formula1', '')}..{v.get('formula2', '')}".strip()
         default = "(computed)" if info.get("override") else repr(info["default"])
         print(f"{ref:6s} {info['label'][:48]:48s} default {default:14s} {what}")
+
+
+def cmd_notes(args):
+    mod = load(args.model)
+    for ref, text in mod.NOTES:
+        print(f"[{ref}] {text}\n")
 
 
 def cmd_calc(args):
@@ -274,6 +284,9 @@ def main(argv=None):
     s.add_argument("model")
     s.add_argument("--grep")
     s.set_defaults(fn=cmd_inputs)
+    s = sub.add_parser("notes", help="print the sheet's instructions and notes")
+    s.add_argument("model")
+    s.set_defaults(fn=cmd_notes)
     s = sub.add_parser("calc", help="calculate, like editing the sheet")
     s.add_argument("model")
     s.add_argument("set", nargs="*", metavar="CELL=VALUE")

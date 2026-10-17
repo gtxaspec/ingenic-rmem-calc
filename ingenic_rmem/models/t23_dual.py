@@ -105,6 +105,12 @@ INPUTS = {
     'E30': {'default': 540, 'options': None, 'override': False, 'validation': None, 'label': 'IVDC memline'},
 }
 
+# the sheet's instructions and notes, as shown to its users
+NOTES = [
+    ('A1', '使用说明：\n1.设置Sensor、主路、次路、第三路分辨率，图像格式和nrVbs大小；\n2.设置内存大小\n3.设置编码分辨率(需要注意编码尺寸和通道分辨率不同的情形）；\n4、设置是否是能通道:En，是否是能jpeg编码:EnJpeg，是否使能EnLongRef（目前不使能）\n最后会自动算出内存分割cmdline，直接复制使用即可。\n5、下面两个API可以在SDK初始化之前指定编码输出buf和osd模块使用buf的大小来减少rmem使用。\n 1）码流buffer: 编码输出buf，这个buf默认是根据分辨率按照经验压缩比计算得到。实际可以根据产品的码流控制来设置大小，需要设置比I帧大。例如在720p分辨率时设置1MB\n 2）OSDBuf: OSD模块buf，这个buf存放的是osd叠加图片使用的，默认是分配1Mbyte，可以根据实际产品功能调小，例如512K。 \n 内存优化调用: \n extern "C" {\n     //设置编码输出码流buf大小\n     extern int IMP_Encoder_SetPoolSize(int size);\n     //设置OSD模块使用大小\n     extern int IMP_OSD_SetPoolSize(int size);\n }\n 初始化SDK之前调用 IMP_OSD_SetPoolSize(180*1024)和IMP_Encoder_SetPoolSize(1*1024*1024);'),
+    ('A28', '开启IVDC功能之后，需要使用rmem内存，具体大小根据ivdc_mem_line设置计算。'),
+]
+
 # formula cell -> sheet labels
 LABELS = {
     'M11': 'NV12 / NO',

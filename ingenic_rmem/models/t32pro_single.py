@@ -103,6 +103,15 @@ INPUTS = {
     'O48': {'default': None, 'options': ['0', '1'], 'override': False, 'validation': {'type': 'list', 'formula1': '"0,1"', 'allow_blank': True, 'options': ['0', '1']}, 'label': ''},
 }
 
+# the sheet's instructions and notes, as shown to its users
+NOTES = [
+    ('B6', 'ISP\n1、ISP使用的内存可以通过ISP驱动参数isp_memopt选择，配置[0x0, 0x5]时的内存占用相比配置[0x10, 0x15]时的更大，但图像效果更好。配置范围：[0x0, 0x15]，建议配置范围为[0x0, 0x5]或[0x10, 0x15]。如果不配置此参数，默认是0x5。配置方法：insmod tx-isp-t32pro.ko isp_memopt=0x5\n2、ISP使用sensor缓存可以通过ISP驱动参数isp_cache_line选择，单摄一般不配置该参数。如果不配置此参数，默认是0。配置方法：insmod tx-isp-t32pro.ko isp_cache_line=0'),
+    ('B14', 'Framesource\n1、IVDC属于编码直通模式，单摄只有通道0支持，开启后rmem内存占用减少。默认不开启编码直通。配置方法：insmod tx-isp-t32pro.ko direct_mode=1 ivdc_mem_line=810；编码直通模式下，ivdc_mem_line默认为height/2。\n2、开启SubStreamOnline功能(默认关闭)：用户可以通过下述接口进行参数设置，支持通道1和通道2，内存计算修改为width*sub_mem_line*3/2。开启此功能的通道不能使用算法。\nIMP_FrameSource_SetSubStreamOnlineMode(int chnNum, IMPFSSubStreamAttr *pSubStreamAttr)；\n3、通道2一般为算法使用通道，推荐nrvbs配置为1。'),
+    ('B22', 'I2D/LDC\n1、I2D是旋转模块；LDC是畸变矫正，支持横向竖向畸变矫正；只支持横向畸变矫正。\n2、I2D、LDC、 之间完全互斥，同时只能开启一个。\n3、在线模式(Online)：开启之后，所有通道一起生效。\n4、 离线模式(Offline)：开启之后，可单独配置每个通道生效。\n5、nrvbs为预留，根据后期实现选择。\n6、Online模式下，建议操作CHN0，若是多个通道既有使用LDC，既有使用I2D，请CHN0设置为I2D（只是内存计算，功能无此限制）。\n'),
+    ('B30', 'OSD\n1、OSD 内存按实际 pool size 评估；主通道使用 ISP OSD，其他通道使用 IPU OSD。\n2、多摄场景 OSD pool 全局复用，不按 Sensor 或 Channel 数重复累加。\n3、当前工程默认 IPU OSD pool=40 KiB、ISP OSD pool=40 KiB；通过 IMP_OSD_SetPoolSize() 和 IMP_OSD_SetPoolSize_ISP() 按项目实配覆盖。'),
+    ('B37', 'Encoder\n1、该模块H265/H264/JPEG支持分段编码功能。\n2、不开启分段编码功能：SDK内部会设置默认ivpu bs大小为3840*2160、jpeg bs大小为500*1024，用户可通过下述API调整码流bs大小。建议用户根据实际产品使用调整。\nIMP_Encoder_SetIvpuBsSize(uint32_t ivpuBsSize)；设置H264/H265码流bs大小\nIMP_Encoder_SetJpegBsSize(uint32_t jpegBsSize)；设置JPEG码流bs大小\n3、开启分段编码功能(默认开启)：当前工程评估默认 IVPU BS=100*1024，JPEG BS=10*1024；项目可按实际 API 配置调整。\n4、开启运动质量优化功能(默认关闭)：用户可以通过下述接口控制开关\nIMP_Encoder_SetMotionQualityEnable(int encChn, int enable)；\n5、开启QpgAI功能(默认关闭)：用户可以通过下述接口控制开关\nIMP_Encoder_SetChnQpgAIEnable(int encChn, int enable)；\n6、开启Jrfc_Max_Size功能(默认开启)：用户可以通过下述接口进行参数设置，默认Jrfc_Max_Size等于80\nIMP_Encoder_SetChnRfcRatio(int encChn, int jrfc_ratio)；'),
+]
+
 # formula cell -> sheet labels
 LABELS = {
     'E9': 'size',
