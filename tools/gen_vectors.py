@@ -103,13 +103,55 @@ def same(a, b):
     return a == b or (a in (None, "") and b in (None, ""))
 
 
+def bound(text):
+    try:
+        return float(text)
+    except (TypeError, ValueError):
+        return None
+
+
 def domain(ref, info):
     """Candidate values for one input cell."""
     opts = info.get("options")
     default = info.get("value")
     if opts:
-        return [o for o in opts if o not in (None, "")] or [default]
+        opts = [o for o in opts if o not in (None, "")] or [default]
+        # Excel parses a picked entry like typed input: numeric text becomes
+        # a number, TRUE/FALSE a logical
+        conv = []
+        for o in opts:
+            if isinstance(o, str) and o.strip().upper() in ("TRUE", "FALSE"):
+                conv.append(o.strip().upper() == "TRUE")
+                continue
+            try:
+                f = float(o)
+                conv.append(int(f) if f.is_integer() else f)
+            except (TypeError, ValueError):
+                conv.append(o)
+        return conv
     label = " ".join(str(x) for x in (info["label"].get("row"), info["label"].get("col")) if x).lower()
+    val = info.get("validation") or {}
+    if val.get("type") in ("whole", "decimal"):
+        lo, hi = bound(val.get("formula1")), bound(val.get("formula2"))
+        op = val.get("operator") or "between"
+        pool = WIDTHS + HEIGHTS + [0, 1, 2, 3, 4, 8, 16, 32]
+        if isinstance(default, (int, float)) and not isinstance(default, bool):
+            pool.append(default)
+
+        def ok(x):
+            if op == "between":
+                return (lo is None or x >= lo) and (hi is None or x <= hi)
+            if op == "greaterThanOrEqual":
+                return lo is None or x >= lo
+            if op == "greaterThan":
+                return lo is None or x > lo
+            if op == "lessThanOrEqual":
+                return lo is None or x <= lo
+            if op == "lessThan":
+                return lo is None or x < lo
+            return True
+        cand = sorted({x for x in pool if ok(x)})
+        return cand or [default]
     if isinstance(default, bool):
         return [True, False]
     if isinstance(default, (int, float)):
@@ -160,9 +202,18 @@ def main():
                 if not same(got, f["cached"]):
                     mismatch.append((ref, f["cached"], got))
             rng = random.Random(f"{model}:{book['workbook']}")
+            # writing a value into an override cell deletes its formula for
+            # the rest of the session, so every vector starts by restoring them
+            saved = {ref: sheet.getCellRangeByName(ref).getFormula()
+                     for ref, info in sh["inputs"].items() if info.get("override")}
             vectors = []
             for _ in range(count):
-                inputs = {ref: rng.choice(domain(ref, info)) for ref, info in sh["inputs"].items()}
+                for ref, formula in saved.items():
+                    sheet.getCellRangeByName(ref).setFormula(formula)
+                inputs = {}
+                for ref, info in sh["inputs"].items():
+                    if not info.get("override") or rng.random() < 0.25:
+                        inputs[ref] = rng.choice(domain(ref, info))
                 for ref, value in inputs.items():
                     write_cell(sheet.getCellRangeByName(ref), value)
                 doc.calculateAll()

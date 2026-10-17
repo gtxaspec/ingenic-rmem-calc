@@ -187,18 +187,22 @@ def main(path, out_path):
                 cell["shared_from"] = mref
 
         validations = []
+
+        def rule(dv, sqref, f1, f2):
+            return {"cells": expand_sqref(sqref or ""), "type": dv.get("type"),
+                    "operator": dv.get("operator", "between" if dv.get("type") in ("whole", "decimal") else None),
+                    "formula1": f1.text if f1 is not None else None,
+                    "formula2": f2.text if f2 is not None else None,
+                    "allow_blank": dv.get("allowBlank") == "1",
+                    "prompt": dv.get("prompt"), "prompt_title": dv.get("promptTitle"),
+                    "error": dv.get("error"), "error_title": dv.get("errorTitle")}
         dvs = root.find(f"{{{M}}}dataValidations")
         for dv in (dvs if dvs is not None else []):
-            f1 = dv.find(f"{{{M}}}formula1")
-            validations.append({"cells": expand_sqref(dv.get("sqref", "")), "type": dv.get("type"),
-                                "formula1": f1.text if f1 is not None else None,
-                                "prompt": dv.get("prompt"), "error": dv.get("error")})
+            validations.append(rule(dv, dv.get("sqref"), dv.find(f"{{{M}}}formula1"), dv.find(f"{{{M}}}formula2")))
         for dv in root.iter(f"{{{X14}}}dataValidation"):
-            f1 = dv.find(f"{{{X14}}}formula1/{{{XM}}}f")
             sq = dv.find(f"{{{XM}}}sqref")
-            validations.append({"cells": expand_sqref(sq.text if sq is not None else ""), "type": dv.get("type"),
-                                "formula1": f1.text if f1 is not None else None,
-                                "prompt": dv.get("prompt"), "error": dv.get("error")})
+            validations.append(rule(dv, sq.text if sq is not None else "",
+                                    dv.find(f"{{{X14}}}formula1/{{{XM}}}f"), dv.find(f"{{{X14}}}formula2/{{{XM}}}f")))
 
         comments = {}
         rel_part = part.replace("worksheets/", "worksheets/_rels/") + ".rels"
@@ -249,9 +253,12 @@ def main(path, out_path):
         for ref, info in inputs.items():
             cell = sheet["cells"].get(ref, {})
             info["value"] = cell.get("value")
+            # a formula cell with a dropdown: the formula is the default and
+            # picking a value replaces it
+            info["override"] = bool(cell.get("formula"))
             if ref in dropdowns:
                 info["options"] = dropdowns[ref].get("options")
-                info["validation"] = {k: v for k, v in dropdowns[ref].items() if k in ("type", "formula1", "prompt")}
+                info["validation"] = {k: v for k, v in dropdowns[ref].items() if k != "cells" and v not in (None, False)}
             info["label"] = label_for(sheet["cells"], ref)
         sheet["inputs"] = dict(sorted(inputs.items(), key=lambda kv: split_ref(kv[0])[::-1]))
         sheet["formulas"] = {ref: {"formula": c["formula"], "cached": c["value"], "label": label_for(sheet["cells"], ref)}
