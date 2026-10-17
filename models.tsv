@@ -1,0 +1,16 @@
+t20_t10	t41_v1.3_3BDA23FD.json	rmem计算器T20&T10	T10, T20
+t30	t41_v1.3_3BDA23FD.json	rmem计算器T30	T30
+t21	t41_v1.3_3BDA23FD.json	rmem计算器T21	T21
+t31	t41_v1.3_3BDA23FD.json	rmem计算器T31	T31, C100
+t23_single	t23_v1.2.0_F11DF659.json	单摄rmem计算器	T23
+t23_dual	t23_v1.2.0_F11DF659.json	双摄rmem计算器	T23
+t23_triple	t23_v1.2.0_F11DF659.json	三摄rmem计算器	T23
+t40	t40_v1.2_06FD31D2.json	T40 rmem计算器	T40
+t40_v1.1	t41_v1.3_3BDA23FD.json	rmem计算器T40 	T40 (V1.1), T41 dual camera
+t41	t41_v1.3_3BDA23FD.json	rmem计算器T41	T41
+t32_single	t32_v1.3_D5E69D97.json	单摄	T32
+t32_multi	t32_v1.3_D5E69D97.json	多摄	T32
+t32pro_single	t32pro_v1.2_E9195C59.json	单摄	T32Pro
+t32pro_multi	t32pro_v1.2_E9195C59.json	多摄	T32Pro
+t33_single	t33_v1.2_B4AA7DCC.json	单摄	T33
+t33_multi	t33_v1.2_B4AA7DCC.json	多摄	T33
