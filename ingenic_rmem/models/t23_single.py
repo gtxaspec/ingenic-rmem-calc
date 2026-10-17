@@ -4,6 +4,7 @@ t23_v1.2.0_F11DF659.xlsx sheet '单摄rmem计算器'; regenerate, do not edit.
 from .. import xl
 
 SOURCE = {'workbook': 't23_v1.2.0_F11DF659.xlsx', 'sheet': '单摄rmem计算器'}
+SOCS = 'T23'
 
 # input cell -> saved default, dropdown options, sheet labels; an 'override'
 # cell is a formula the user may replace by picking a value (default None = computed)

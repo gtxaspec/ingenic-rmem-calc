@@ -4,6 +4,7 @@ t33_v1.2_B4AA7DCC.xlsx sheet '单摄'; regenerate, do not edit.
 from .. import xl
 
 SOURCE = {'workbook': 't33_v1.2_B4AA7DCC.xlsx', 'sheet': '单摄'}
+SOCS = 'T33'
 
 # input cell -> saved default, dropdown options, sheet labels; an 'override'
 # cell is a formula the user may replace by picking a value (default None = computed)

@@ -4,6 +4,7 @@ t32_v1.3_D5E69D97.xlsx sheet '多摄'; regenerate, do not edit.
 from .. import xl
 
 SOURCE = {'workbook': 't32_v1.3_D5E69D97.xlsx', 'sheet': '多摄'}
+SOCS = 'T32'
 
 # input cell -> saved default, dropdown options, sheet labels; an 'override'
 # cell is a formula the user may replace by picking a value (default None = computed)

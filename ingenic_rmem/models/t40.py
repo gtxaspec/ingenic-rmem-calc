@@ -4,6 +4,7 @@ t40_v1.2_06FD31D2.xlsx sheet 'T40 rmem计算器'; regenerate, do not edit.
 from .. import xl
 
 SOURCE = {'workbook': 't40_v1.2_06FD31D2.xlsx', 'sheet': 'T40 rmem计算器'}
+SOCS = 'T40'
 
 # input cell -> saved default, dropdown options, sheet labels; an 'override'
 # cell is a formula the user may replace by picking a value (default None = computed)
