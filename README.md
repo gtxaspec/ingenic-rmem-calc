@@ -38,12 +38,14 @@ rmem for it (or any SoC).
 
 ## Layout
 
-- `reference/` - the vendor workbooks being reproduced; `sources.tsv` records
-  where each came from (SDK build, original file name) and its CRC is in the name.
+- `reference/` - where the vendor workbooks go. They are Ingenic's and not
+  in this repository; `sources.tsv` lists each one (SDK build, original file
+  name) and its CRC, which is part of the expected file name.
 - `models.tsv` - the calculators to port: model, inventory file, sheet, SoCs.
-- `inventory/` - per-workbook JSON of every input (with dropdown options),
-  formula cell and note, from `tools/sheet_inventory.py`; `CHECKLIST.md` is the
-  readable feature list from `tools/inventory_report.py`.
+- `inventory/` - generated, not committed: per-workbook JSON of every input
+  (with dropdown options), formula cell and note, from
+  `tools/sheet_inventory.py`; `CHECKLIST.md` is the readable feature list from
+  `tools/inventory_report.py`. The coverage test runs when it is present.
 - `vectors/` - golden test vectors from `tools/gen_vectors.py`.
 
 ## Regenerating

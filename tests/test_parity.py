@@ -90,6 +90,8 @@ class Layout(unittest.TestCase):
 
 
 class Coverage(unittest.TestCase):
+    @unittest.skipUnless(os.path.isdir(os.path.join(ROOT, "inventory")),
+                         "inventory/ is generated from the vendor workbooks")
     def test_every_inventoried_cell_is_modelled(self):
         for model, (inv, sheet) in models_tsv().items():
             mod = importlib.import_module(f"ingenic_rmem.models.{model}")
