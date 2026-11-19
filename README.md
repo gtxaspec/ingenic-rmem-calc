@@ -57,3 +57,8 @@ rmem for it (or any SoC).
 `gen_vectors.py` needs LibreOffice Calc and its UNO bridge (`libreoffice-calc`,
 `python3-uno`); it first checks that LibreOffice reproduces the values the
 authoring application cached in each workbook.
+
+## License
+
+MIT, see `LICENSE`. The vendor workbooks it reproduces are Ingenic's and are not
+part of this repository.
